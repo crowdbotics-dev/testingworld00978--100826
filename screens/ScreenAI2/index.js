@@ -1,9 +1,23 @@
-import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+import { api_v1_login_create } from "../../store/testingworldAPI/authTokens.slice.js";
+import { useDispatch } from "react-redux";
 import React from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
 
 const LoginScreen = () => {
-  const navigation = useNavigation();
+  const {
+    entities: username
+  } = useSelector(state => state.username);
+  const dispatch = useDispatch();
+
+  const onSubmit = () => {
+    dispatch(api_v1_login_create({
+      username: {
+        username
+      }
+    }));
+  };
+
   return <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
         <Text style={styles.logoText}>My App</Text>
@@ -11,11 +25,7 @@ const LoginScreen = () => {
       <View style={styles.formContainer}>
         <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#999" />
         <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#999" secureTextEntry />
-        <TouchableOpacity style={styles.button} onPress={() => {
-        navigation.navigate("welcome", {
-          test: "test123"
-        });
-      }}>
+        <TouchableOpacity style={styles.button} onPress={onSubmit}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>
